@@ -8,9 +8,8 @@ import {
   FormControl,
   useTheme
 } from "@material-ui/core";
-import { useStyles, InputTextField } from "./LoginStyles";
-import backgroundImage from '../assets/bg-img.png';
-import bubble from '../assets/bubble.svg';
+import { useStyles, InputTextField } from "../components/SharedStyles/LoginSignupStyles";
+import Banner from "../components/Banner/Banner";
 import { login } from "../store/utils/thunkCreators";
 
 const Login = (props) => {
@@ -33,19 +32,7 @@ const Login = (props) => {
 
   return (
     <Grid container className={classes.container} direction="row">
-      <Grid container item md={4} className={classes.leftContainer} justifyContent="center">
-        <img src={backgroundImage} alt="" className={classes.backgroundImage} />
-        <Grid container item className={classes.iconTextContainer} direction="column" alignContent="center" xs={12} spacing={5}>
-          <Grid item>
-            <img src={bubble} alt="" className={classes.bubbleIcon} />
-          </Grid>
-          <Grid item>
-            <Typography className={classes.description}>
-              Converse with anyone with any language
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Banner />
       <Grid container item md={8} xs={12} className={classes.rightContainer} direction="column">
         <Grid container item className={classes.topRightContainer} justifyContent="flex-end" alignContent="center">
           <Typography className={classes.label}>
