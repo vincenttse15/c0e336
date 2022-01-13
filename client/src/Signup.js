@@ -43,10 +43,10 @@ const Login = (props) => {
   return (
     <Grid container className={classes.container} direction="row">
       <Grid container item md={4} className={classes.leftContainer} justifyContent="center">
-        <img src={backgroundImage} alt="background" className={classes.backgroundImage} />
+        <img src={backgroundImage} alt="" className={classes.backgroundImage} />
         <Grid container item className={classes.iconTextContainer} direction="column" alignContent="center" xs={12} spacing={5}>
           <Grid item>
-            <img src={bubble} alt="bubble icon" className={classes.bubbleIcon} />
+            <img src={bubble} alt="" className={classes.bubbleIcon} />
           </Grid>
           <Grid item>
             <Typography className={classes.description}>
