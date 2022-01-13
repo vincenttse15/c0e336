@@ -103,7 +103,7 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-                <FormHelperText>
+                <FormHelperText style={{ color: 'red' }}>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </Grid>
@@ -118,7 +118,7 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-                <FormHelperText>
+                <FormHelperText style={{ color: 'red' }}>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </Grid>
