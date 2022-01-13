@@ -76,7 +76,7 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: '26px',
   },
   formContainer: {
-    padding: '8vw 5vw',
+    padding: '5vw 5vw',
   },
   loginBtn: {
     backgroundColor: '#3A8DFF',

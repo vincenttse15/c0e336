@@ -3,16 +3,20 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
-  TextField,
+  useTheme,
   FormHelperText,
 } from "@material-ui/core";
+import { useStyles, InputTextField } from "./Login/LoginStyles";
+import backgroundImage from './assets/bg-img.png';
+import bubble from './assets/bubble.svg';
 import { register } from "./store/utils/thunkCreators";
 
 const Login = (props) => {
+  const theme = useTheme();
+  const classes = useStyles(theme);
   const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -37,72 +41,96 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl>
-                <TextField
-                  label="E-mail address"
-                  aria-label="e-mail address"
-                  type="email"
-                  name="email"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  aria-label="password"
-                  label="Password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="password"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
-                <TextField
-                  label="Confirm Password"
-                  aria-label="confirm password"
-                  type="password"
-                  inputProps={{ minLength: 6 }}
-                  name="confirmPassword"
-                  required
-                />
-                <FormHelperText>
-                  {formErrorMessage.confirmPassword}
-                </FormHelperText>
-              </FormControl>
-            </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
+    <Grid container className={classes.container} direction="row">
+      <Grid container item md={4} className={classes.leftContainer} justifyContent="center">
+        <img src={backgroundImage} alt="background" className={classes.backgroundImage} />
+        <Grid container item className={classes.iconTextContainer} direction="column" alignContent="center" xs={12} spacing={5}>
+          <Grid item>
+            <img src={bubble} alt="bubble icon" className={classes.bubbleIcon} />
           </Grid>
-        </form>
-      </Box>
+          <Grid item>
+            <Typography className={classes.description}>
+              Converse with anyone with any language
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container item md={8} xs={12} className={classes.rightContainer} direction="column">
+        <Grid container item className={classes.topRightContainer} justifyContent="flex-end" alignContent="center">
+          <Typography className={classes.label}>
+            Already have an account?
+          </Typography>
+          <Button onClick={() => history.push("/login")} className={classes.createAccountBtn}>
+            Login
+          </Button>
+        </Grid>
+        <Grid container item className={classes.bottomRightContainer} direction="column">
+          <form onSubmit={handleRegister}>
+            <Grid container item direction="column" className={classes.formContainer} spacing={2}>
+              <Grid item className={classes.welcomeContainer}>
+                <h1 className={classes.welcome}>Create an account.</h1>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" style={{ width: '100%' }}>
+                  <InputTextField
+                    aria-label="username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                    required
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" style={{ width: '100%' }}>
+                  <InputTextField
+                    aria-label="e-mail address"
+                    label="E-mail address"
+                    name="email"
+                    type="email"
+                    required
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" style={{ width: '100%' }} error={!!formErrorMessage.confirmPassword}>
+                  <InputTextField
+                    aria-label="password"
+                    label="Password"
+                    type="password"
+                    inputProps={{ minLength: 6 }}
+                    name="password"
+                    required
+                  />
+                </FormControl>
+                <FormHelperText>
+                  {formErrorMessage.confirmPassword}
+                </FormHelperText>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" style={{ width: '100%' }} error={!!formErrorMessage.confirmPassword}>
+                  <InputTextField
+                    label="Confirm Password"
+                    aria-label="confirm password"
+                    type="password"
+                    inputProps={{ minLength: 6 }}
+                    name="confirmPassword"
+                    required
+                  />
+                </FormControl>
+                <FormHelperText>
+                  {formErrorMessage.confirmPassword}
+                </FormHelperText>
+              </Grid>
+              <Grid container item justifyContent="center">
+                <Button type="submit" variant="contained" className={classes.loginBtn}>
+                  Create
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
