@@ -48,7 +48,7 @@ export const useStyles = makeStyles((theme) => ({
   rightContainer: {
     width: '100%',
     height: '100%',
-    padding: '30px 42px',
+    padding: theme.spacing(3, 5),
   },
   topRightContainer: {
     height: '10%',
@@ -58,36 +58,39 @@ export const useStyles = makeStyles((theme) => ({
     height: '90%',
   },
   label: {
-    color: '#B0B0B0',
     fontSize: '14px',
     alignSelf: 'center',
   },
-  createAccountBtn: {
+  topRightBtn: {
     boxShadow: '0px 2px 12px rgba(74, 106, 149, 0.2)',
     borderRadius: '5px',
-    color: '#3A8DFF',
     height: '54px',
     width: '170px',
-    marginLeft: '30px',
+    marginLeft: theme.spacing(3),
+    color: theme.palette.primary.main,
   },
-  welcome: {
-    color: '#000000',
-    fontWeight: '600',
-    fontSize: '26px',
+  signupFormContainer: {
+    padding: '5vh 5vw',
   },
-  formContainer: {
-    padding: '5vw 5vw',
+  loginFormContainer : {
+    padding: '10vh 5vw',
   },
-  loginBtn: {
-    backgroundColor: '#3A8DFF',
+  submitBtn: {
     borderRadius: '3px',
     width: '160px',
     height: '56px',
-    color: '#FFFFFF',
     textAlign: 'center',
-    marginTop: '50px',
+    marginTop: theme.spacing(6),
   },
-  '@media (max-width: 900px)': {
+  textFieldContainer: {
+    width: '100%',
+    marginLeft: theme.spacing(0.5),
+  },
+  error: {
+    color: 'red',
+    marginLeft: theme.spacing(0.5), 
+  },
+  '@media (max-width: 899px)': {
     leftContainer: {
       display: 'none',
     },
@@ -101,25 +104,31 @@ export const useStyles = makeStyles((theme) => ({
     bottomRightContainer: {
       height: '80%',
     },
-    createAccountBtn: {
+    topRightBtn: {
       marginLeft: '0px',
-      marginTop: '30px',
+      marginTop: theme.spacing(3),
     },
-    formContainer: {
-      padding: '8vw 2vw',
+    signupFormContainer: {
+      padding: '5vh 2vw',
+    },
+    loginFormContainer: {
+      padding: '8vh 2vw',
     },
     welcomeContainer: {
       alignSelf: 'center',
     },
-  }
+  },
+  '@media (max-width: 320px)' : {
+    rightContainer: {
+      padding: theme.spacing(4, 2),
+    },
+  },
 }));
 
 export function InputTextField(props) {
   return <TextField
     InputLabelProps={{
-      style: {
-        color: '#B0B0B0',
-      }
+      color: 'secondary',
     }}
     {...props} />;
 }

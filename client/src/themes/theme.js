@@ -8,7 +8,12 @@ export const theme = createTheme({
       textTransform: "none",
       letterSpacing: 0,
       fontWeight: "bold"
-    }
+    },
+    h1: {
+      fontSize: "26px",
+      fontWeight: "600",
+      color: "#000000",
+    },
   },
   overrides: {
     MuiInput: {
@@ -18,7 +23,7 @@ export const theme = createTheme({
     }
   },
   palette: {
-    primary: { main: "#3A8DFF" },
+    primary: { main: "#3A8DFF", contrastText: "#FFFFFF" },
     secondary: { main: "#B0B0B0" }
   },
   breakpoints: {

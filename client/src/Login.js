@@ -8,9 +8,9 @@ import {
   FormControl,
   useTheme
 } from "@material-ui/core";
-import { useStyles, InputTextField } from "../components/SharedStyles/LoginSignupStyles";
-import Banner from "../components/Banner/Banner";
-import { login } from "../store/utils/thunkCreators";
+import { useStyles, InputTextField } from "./components/SharedStyles/LoginSignupStyles";
+import Banner from "./components/Banner/Banner";
+import { login } from "./store/utils/thunkCreators";
 
 const Login = (props) => {
   const theme = useTheme();
@@ -35,21 +35,21 @@ const Login = (props) => {
       <Banner />
       <Grid container item md={8} xs={12} className={classes.rightContainer} direction="column">
         <Grid container item className={classes.topRightContainer} justifyContent="flex-end" alignContent="center">
-          <Typography className={classes.label}>
+          <Typography className={classes.label} color="secondary">
             Don't have an account?
           </Typography>
-          <Button onClick={() => history.push("/register")} className={classes.createAccountBtn}>
+          <Button onClick={() => history.push("/register")} className={classes.topRightBtn}>
             Create account
           </Button>
         </Grid>
         <Grid container item className={classes.bottomRightContainer} direction="column">
           <form onSubmit={handleLogin}>
-            <Grid container item direction="column" className={classes.formContainer} spacing={2}>
+            <Grid container item direction="column" className={classes.loginFormContainer} spacing={2}>
               <Grid item className={classes.welcomeContainer}>
-                <h1 className={classes.welcome}>Welcome back!</h1>
+                <Typography variant="h1" className={classes.welcome}>Welcome back!</Typography>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" required style={{ width: '100%' }}>
+                <FormControl margin="normal" required className={classes.textFieldContainer}>
                   <InputTextField
                     aria-label="username"
                     label="Username"
@@ -59,7 +59,7 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" required style={{ width: '100%' }}>
+                <FormControl margin="normal" required className={classes.textFieldContainer}>
                   <InputTextField
                     label="Password"
                     aria-label="password"
@@ -69,7 +69,7 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
               <Grid container item justifyContent="center">
-                <Button type="submit" variant="contained" className={classes.loginBtn}>
+                <Button type="submit" color="primary" variant="contained" className={classes.submitBtn}>
                   Login
                 </Button>
               </Grid>

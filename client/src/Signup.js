@@ -44,21 +44,21 @@ const Login = (props) => {
       <Banner />
       <Grid container item md={8} xs={12} className={classes.rightContainer} direction="column">
         <Grid container item className={classes.topRightContainer} justifyContent="flex-end" alignContent="center">
-          <Typography className={classes.label}>
+          <Typography className={classes.label} color="secondary">
             Already have an account?
           </Typography>
-          <Button onClick={() => history.push("/login")} className={classes.createAccountBtn}>
+          <Button onClick={() => history.push("/login")} className={classes.topRightBtn}>
             Login
           </Button>
         </Grid>
         <Grid container item className={classes.bottomRightContainer} direction="column">
           <form onSubmit={handleRegister}>
-            <Grid container item direction="column" className={classes.formContainer} spacing={2}>
+            <Grid container item direction="column" className={classes.signupFormContainer} spacing={2}>
               <Grid item className={classes.welcomeContainer}>
-                <h1 className={classes.welcome}>Create an account.</h1>
+                <Typography variant="h1" className={classes.welcome}>Create an account.</Typography>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" style={{ width: '100%' }}>
+                <FormControl margin="normal" className={classes.textFieldContainer}>
                   <InputTextField
                     aria-label="username"
                     label="Username"
@@ -69,7 +69,7 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" style={{ width: '100%' }}>
+                <FormControl margin="normal" className={classes.textFieldContainer}>
                   <InputTextField
                     aria-label="e-mail address"
                     label="E-mail address"
@@ -80,7 +80,7 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" style={{ width: '100%' }} error={!!formErrorMessage.confirmPassword}>
+                <FormControl margin="normal" className={classes.textFieldContainer} error={!!formErrorMessage.confirmPassword}>
                   <InputTextField
                     aria-label="password"
                     label="Password"
@@ -90,12 +90,12 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-                <FormHelperText style={{ color: 'red' }}>
+                <FormHelperText className={classes.error}>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </Grid>
               <Grid item>
-                <FormControl margin="normal" style={{ width: '100%' }} error={!!formErrorMessage.confirmPassword}>
+                <FormControl margin="normal" className={classes.textFieldContainer} error={!!formErrorMessage.confirmPassword}>
                   <InputTextField
                     label="Confirm Password"
                     aria-label="confirm password"
@@ -105,12 +105,12 @@ const Login = (props) => {
                     required
                   />
                 </FormControl>
-                <FormHelperText style={{ color: 'red' }}>
+                <FormHelperText className={classes.error}>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </Grid>
               <Grid container item justifyContent="center">
-                <Button type="submit" variant="contained" className={classes.loginBtn}>
+                <Button type="submit" variant="contained" color="primary" className={classes.submitBtn}>
                   Create
                 </Button>
               </Grid>
