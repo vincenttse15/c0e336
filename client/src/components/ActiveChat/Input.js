@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  fileName: {
+    whiteSpace: "nowrap",
+  },
 }));
 
 const Input = (props) => {
@@ -126,7 +129,7 @@ const Input = (props) => {
           {files.map((file, index) => {
             return (
               <div className={classes.selectedImageContainer} key={file.name + index}>
-                <Typography>{file.name}</Typography>
+                <Typography className={classes.fileName}>{file.name}</Typography>
                 <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
                   <DeleteOutlineIcon />
                 </IconButton>
