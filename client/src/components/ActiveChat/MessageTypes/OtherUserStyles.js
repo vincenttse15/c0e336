@@ -27,7 +27,7 @@ export const otherUserUseStyles = makeStyles(() => ({
     borderRadius: "0 10px 10px 10px",
   },
   textAccompanyBorder: {
-    borderRadius: "0px 0px 10px 10px",
+    borderRadius: "0px 0px 10px 0px",
   },
   imageAccompanyBorder: {
     borderRadius: "0px 10px 0px 0px",

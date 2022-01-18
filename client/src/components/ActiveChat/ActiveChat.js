@@ -8,7 +8,8 @@ const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     flexGrow: 8,
-    flexDirection: "column"
+    flexDirection: "column",
+    width: '54%',
   },
   chatContainer: {
     marginLeft: 41,
@@ -17,7 +18,12 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     flexGrow: 1,
     justifyContent: "space-between"
-  }
+  },
+  '@media (max-width: 769px)' : {
+    root: {
+      width: '100%',
+    },
+  },
 }));
 
 const ActiveChat = (props) => {

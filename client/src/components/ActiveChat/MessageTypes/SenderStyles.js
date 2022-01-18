@@ -6,6 +6,7 @@ export const senderUseStyles = makeStyles(() => ({
     flexDirection: "row",
     gap: "5px",
     flexWrap: "wrap",
+    justifyContent: "flex-end"
   },
   text: {
     fontSize: 14,

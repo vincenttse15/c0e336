@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FormControl, FilledInput, IconButton, useTheme } from "@material-ui/core";
+import { FormControl, FilledInput, IconButton, useTheme, Typography, Button } from "@material-ui/core";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -7,10 +8,14 @@ import { postMessage } from "../../store/utils/thunkCreators";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+  },
   root: {
     justifySelf: "flex-end",
     marginTop: 15,
-    position: 'relative',
+    position: "relative",
   },
   input: {
     height: 70,
@@ -20,9 +25,30 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(7),
   },
   uploadBtn: {
-    position: 'absolute',
-    right: '1%',
-    top: '13%',
+    position: "absolute",
+    right: "1%",
+    top: "13%",
+  },
+  selectedImagesContainer: {
+    display: "flex",
+    gap: "5px",
+    overflow: "auto",
+    backgroundColor: "#F4F6FA",
+    borderRadius: 8,
+    alignItems: "center",
+    padding: theme.spacing(1, 1),
+    marginTop: 15,
+    "&::-webkit-scrollbar": {
+      height: "6px",
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: "gray",
+      borderRadius: 8,
+    }
+  },
+  selectedImageContainer: {
+    display: "flex",
+    alignItems: "center",
   },
 }));
 
@@ -54,7 +80,7 @@ const Input = (props) => {
       setFiles([]);
       setIsUploading(false);
     }
-    
+
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
     const reqBody = {
       text: event.target.text.value,
@@ -89,31 +115,51 @@ const Input = (props) => {
     }
   };
 
+  const deleteSelectedFile = (index) => {
+    setFiles(prevFiles => prevFiles.filter((file, i) => index !== i));
+  };
+
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <FormControl fullWidth hiddenLabel>
-        <FilledInput
-          classes={{ root: classes.input }}
-          disableUnderline
-          placeholder="Type something..."
-          value={text}
-          name="text"
-          onChange={handleTextChange}
-          disabled={isUploading}
-        />
-      </FormControl>
-      <IconButton color="secondary" className={classes.uploadBtn} component="label">
-        <FileCopyOutlinedIcon />
-        <input
-          type="file"
-          hidden
-          accept="image/*"
-          multiple
-          onChange={handleFileChange}
-          disabled={isUploading}
-        />
-      </IconButton>
-    </form>
+    <div className={classes.container}>
+      {files.length > 0 && (
+        <div className={classes.selectedImagesContainer}>
+          {files.map((file, index) => {
+            return (
+              <div className={classes.selectedImageContainer} key={file.name + index}>
+                <Typography>{file.name}</Typography>
+                <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
+                  <DeleteOutlineIcon />
+                </IconButton>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <form className={classes.root} onSubmit={handleSubmit}>
+        <FormControl fullWidth hiddenLabel>
+          <FilledInput
+            classes={{ root: classes.input }}
+            disableUnderline
+            placeholder="Type something..."
+            value={text}
+            name="text"
+            onChange={handleTextChange}
+            disabled={isUploading}
+          />
+        </FormControl>
+        <IconButton color="secondary" className={classes.uploadBtn} component="label">
+          <FileCopyOutlinedIcon />
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+            disabled={isUploading}
+          />
+        </IconButton>
+      </form>
+    </div>
   );
 };
 
