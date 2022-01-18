@@ -14,12 +14,14 @@ export const MessageTypes = (props) => {
         {attachments &&
           attachments.map((image) => {
             return (
-              <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.singleBorder}`} />
+              <a href={image} target="_blank" rel="noreferrer">
+                <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.singleBorder}`} />
+              </a>
             )
           })}
       </Box>
     );
-  // attachments with text
+    // attachments with text
   } else if (attachments && text.length > 0) {
     return (
       <>
@@ -27,7 +29,9 @@ export const MessageTypes = (props) => {
           {attachments &&
             attachments.map((image) => {
               return (
-                <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.imageAccompanyBorder}`} />
+                <a href={image} target="_blank" rel="noreferrer">
+                  <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.imageAccompanyBorder}`} />
+                </a>
               )
             })}
         </Box>
@@ -36,7 +40,7 @@ export const MessageTypes = (props) => {
         </Box>
       </>
     )
-  // only text
+    // only text
   } else {
     return (
       <Box className={`${classes.bubble} ${classes.singleBorder}`}>
