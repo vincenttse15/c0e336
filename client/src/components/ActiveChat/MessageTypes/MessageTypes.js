@@ -1,21 +1,48 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { senderUseStyles } from "./SenderStyles";
 import { otherUserUseStyles } from "./OtherUserStyles";
 import { Box, Typography } from "@material-ui/core";
 
+const sharedUseStyles = makeStyles(() => ({
+  imageContainer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "5px",
+    flexWrap: "wrap",
+    "& a": {
+      display: "inline-block",
+      width: "100px",
+      height: "100px",
+    }
+  },
+  text: {
+    fontSize: 14,
+    fontWeight: "bold",
+    letterSpacing: -0.2,
+    padding: 8
+  },
+  image: {
+    objectFit: "cover",
+    width: "100px",
+    height: "100px",
+  },
+}));
+
 export const MessageTypes = (props) => {
   const { text, attachments, sender } = props;
-  const classes = sender ? senderUseStyles() : otherUserUseStyles();
+  const specificClasses = sender ? senderUseStyles() : otherUserUseStyles();
+  const sharedClasses = sharedUseStyles();
 
   // only attachments
   if (attachments && text.length === 0) {
     return (
-      <Box className={classes.imageContainer}>
+      <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
         {attachments &&
           attachments.map((image) => {
             return (
               <a href={image} target="_blank" rel="noreferrer">
-                <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.singleBorder}`} />
+                <img src={image} alt="attachment" key={image} className={`${sharedClasses.image} ${specificClasses.singleBorder}`} />
               </a>
             )
           })}
@@ -25,26 +52,26 @@ export const MessageTypes = (props) => {
   } else if (attachments && text.length > 0) {
     return (
       <>
-        <Box className={classes.imageContainer}>
+        <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
           {attachments &&
             attachments.map((image) => {
               return (
                 <a href={image} target="_blank" rel="noreferrer">
-                  <img src={image} alt="attachment" key={image} className={`${classes.image} ${classes.imageAccompanyBorder}`} />
+                  <img src={image} alt="attachment" key={image} className={`${sharedClasses.image} ${specificClasses.imageAccompanyBorder}`} />
                 </a>
               )
             })}
         </Box>
-        <Box className={`${classes.bubble} ${classes.textAccompanyBorder}`}>
-          <Typography className={classes.text}>{text}</Typography>
+        <Box className={`${specificClasses.bubble} ${specificClasses.textAccompanyBorder}`}>
+          <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
         </Box>
       </>
     )
     // only text
   } else {
     return (
-      <Box className={`${classes.bubble} ${classes.singleBorder}`}>
-        <Typography className={classes.text}>{text}</Typography>
+      <Box className={`${specificClasses.bubble} ${specificClasses.singleBorder}`}>
+        <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
       </Box>
     );
   }
