@@ -42,11 +42,19 @@ const Input = (props) => {
     event.preventDefault();
     const urlArray = [];
 
+    // do not let users send messages that contain only whitespace
+    if (event.target.text.value.trim().length === 0 && files.length === 0) {
+      setText("");
+      return;
+    }
+
     if (files.length > 0) {
       setIsUploading(true);
       await uploadToCloudinary(urlArray);
+      setFiles([]);
       setIsUploading(false);
     }
+    
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
     const reqBody = {
       text: event.target.text.value,
@@ -60,7 +68,9 @@ const Input = (props) => {
   };
 
   const handleFileChange = (event) => {
-    setFiles(event.target.files);
+    for (const file of event.target.files) {
+      setFiles(prevFiles => [...prevFiles, file]);
+    }
   }
 
   const uploadToCloudinary = async (urlArray) => {
