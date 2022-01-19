@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { FormControl, FilledInput, IconButton, useTheme, Typography } from "@material-ui/core";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
+import { FormControl, FilledInput, IconButton, useTheme, Typography, Grid } from "@material-ui/core";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-  },
   root: {
     justifySelf: "flex-end",
     marginTop: 15,
@@ -30,12 +26,9 @@ const useStyles = makeStyles((theme) => ({
     top: "13%",
   },
   selectedImagesContainer: {
-    display: "flex",
-    gap: "5px",
     overflow: "auto",
     backgroundColor: "#F4F6FA",
     borderRadius: 8,
-    alignItems: "center",
     padding: theme.spacing(1, 1),
     marginTop: 15,
     "&::-webkit-scrollbar": {
@@ -46,12 +39,11 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 8,
     }
   },
-  selectedImageContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
   fileName: {
     whiteSpace: "nowrap",
+  },
+  selectedImageContainer: {
+    width: "auto",
   },
 }));
 
@@ -103,18 +95,29 @@ const Input = (props) => {
   }
 
   const uploadToCloudinary = async (urlArray) => {
+    const promises = [];
+
     for (const file of files) {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "hatchways");
 
       try {
-        const { data } = await axios.post("https://api.cloudinary.com/v1_1/drlylnzt8/image/upload", formData);
-        urlArray.push(data.secure_url);
+        promises.push(axios.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_LINK, formData));
       } catch (error) {
-        console.log(error);
+        console.error();
         return;
       }
+    }
+
+    try {
+      const responseArray = await Promise.all(promises);
+      responseArray.forEach((response) => {
+        urlArray.push(response.data.secure_url);
+      });
+    } catch (error) {
+      console.error();
+      return;
     }
   };
 
@@ -123,20 +126,24 @@ const Input = (props) => {
   };
 
   return (
-    <div className={classes.container}>
+    <Grid container direction="column">
       {files.length > 0 && (
-        <div className={classes.selectedImagesContainer}>
+        <Grid container item direction="row" className={classes.selectedImagesContainer} wrap="nowrap">
           {files.map((file, index) => {
             return (
-              <div className={classes.selectedImageContainer} key={file.name + index}>
-                <Typography className={classes.fileName}>{file.name}</Typography>
-                <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
-                  <DeleteOutlineIcon />
-                </IconButton>
-              </div>
+              <Grid container className={classes.selectedImageContainer} item direction="row" alignItems="center" key={file.name + index} wrap="nowrap">
+                <Grid item>
+                  <Typography className={classes.fileName}>{file.name}</Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
             );
           })}
-        </div>
+        </Grid>
       )}
       <form className={classes.root} onSubmit={handleSubmit}>
         <FormControl fullWidth hiddenLabel>
@@ -162,7 +169,7 @@ const Input = (props) => {
           />
         </IconButton>
       </form>
-    </div>
+    </Grid>
   );
 };
 

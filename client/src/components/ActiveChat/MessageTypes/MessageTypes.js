@@ -27,6 +27,9 @@ const sharedUseStyles = makeStyles(() => ({
     width: "100px",
     height: "100px",
   },
+  bubbleMargin: {
+    marginBottom: 8,
+  },
 }));
 
 export const MessageTypes = (props) => {
@@ -34,45 +37,58 @@ export const MessageTypes = (props) => {
   const specificClasses = sender ? senderUseStyles() : otherUserUseStyles();
   const sharedClasses = sharedUseStyles();
 
+  const Image = () =>
+    <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
+      {attachments &&
+        attachments.map((image) => {
+          return (
+            <a href={image} target="_blank" rel="noreferrer">
+              <img
+                src={image}
+                alt="attachment" key={image}
+                className={`${sharedClasses.image} 
+                            ${(attachments.length > 1 && text.length >= 0) || (attachments.length === 1 && text.length === 0) ? `${specificClasses.singleBorder}` : ""}
+                            ${attachments.length === 1 && text.length > 0 ? `${specificClasses.imageAccompanyBorder}` : ""}
+                          `}
+              />
+            </a>
+          )
+        })}
+    </Box>
+
+  const Text = () =>
+    <Box className={`${specificClasses.bubble} 
+                     ${attachments && attachments.length === 1 ? `${specificClasses.textAccompanyBorder}` : `${specificClasses.singleBorder}`} 
+                     ${attachments && attachments.length > 1 ? `${sharedClasses.bubbleMargin}` : ""}`}>
+      <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
+    </Box>
+
   // only attachments
   if (attachments && text.length === 0) {
     return (
-      <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
-        {attachments &&
-          attachments.map((image) => {
-            return (
-              <a href={image} target="_blank" rel="noreferrer">
-                <img src={image} alt="attachment" key={image} className={`${sharedClasses.image} ${specificClasses.singleBorder}`} />
-              </a>
-            )
-          })}
-      </Box>
+      <Image />
     );
     // attachments with text
   } else if (attachments && text.length > 0) {
     return (
       <>
-        <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
-          {attachments &&
-            attachments.map((image) => {
-              return (
-                <a href={image} target="_blank" rel="noreferrer">
-                  <img src={image} alt="attachment" key={image} className={`${sharedClasses.image} ${specificClasses.imageAccompanyBorder}`} />
-                </a>
-              )
-            })}
-        </Box>
-        <Box className={`${specificClasses.bubble} ${specificClasses.textAccompanyBorder}`}>
-          <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
-        </Box>
+        {attachments.length > 1 ? (
+          <>
+            <Text />
+            <Image />
+          </>
+        ) : (
+          <>
+            <Image />
+            <Text />
+          </>
+        )}
       </>
     )
     // only text
   } else {
     return (
-      <Box className={`${specificClasses.bubble} ${specificClasses.singleBorder}`}>
-        <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
-      </Box>
+      <Text />
     );
   }
 }
