@@ -3,15 +3,18 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
-  TextField,
+  useTheme
 } from "@material-ui/core";
+import { useStyles, InputTextField } from "./components/SharedStyles/LoginSignupStyles";
+import Banner from "./components/Banner/Banner";
 import { login } from "./store/utils/thunkCreators";
 
 const Login = (props) => {
+  const theme = useTheme();
+  const classes = useStyles(theme);
   const history = useHistory();
   const { user, login } = props;
 
@@ -28,40 +31,52 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
+    <Grid container className={classes.container} direction="row">
+      <Banner />
+      <Grid container item md={8} xs={12} className={classes.rightContainer} direction="column">
+        <Grid container item className={classes.topRightContainer} justifyContent="flex-end" alignContent="center">
+          <Typography className={classes.label} color="secondary">
+            Don't have an account?
+          </Typography>
+          <Button onClick={() => history.push("/register")} className={classes.topRightBtn}>
+            Create account
+          </Button>
         </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
+        <Grid container item className={classes.bottomRightContainer} direction="column">
+          <form onSubmit={handleLogin}>
+            <Grid container item direction="column" className={classes.loginFormContainer} spacing={2}>
+              <Grid item className={classes.welcomeContainer}>
+                <Typography variant="h1" className={classes.welcome}>Welcome back!</Typography>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" required className={classes.textFieldContainer}>
+                  <InputTextField
+                    aria-label="username"
+                    label="Username"
+                    name="username"
+                    type="text"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl margin="normal" required className={classes.textFieldContainer}>
+                  <InputTextField
+                    label="Password"
+                    aria-label="password"
+                    type="password"
+                    name="password"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid container item justifyContent="center">
+                <Button type="submit" color="primary" variant="contained" className={classes.submitBtn}>
+                  Login
+                </Button>
+              </Grid>
             </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
+          </form>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
