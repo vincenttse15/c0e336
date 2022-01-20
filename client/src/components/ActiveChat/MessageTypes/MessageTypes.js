@@ -4,7 +4,7 @@ import { senderUseStyles } from "./SenderStyles";
 import { otherUserUseStyles } from "./OtherUserStyles";
 import { Box, Typography } from "@material-ui/core";
 
-const sharedUseStyles = makeStyles(() => ({
+const sharedUseStyles = makeStyles((props) => ({
   imageContainer: {
     display: "flex",
     flexDirection: "row",
@@ -28,68 +28,54 @@ const sharedUseStyles = makeStyles(() => ({
     height: "100px",
   },
   bubbleMargin: {
-    marginBottom: 8,
+    marginBottom: props => (props.attachments && props.attachments.length > 1) ? 8 : 0,
   },
 }));
 
 export const MessageTypes = (props) => {
   const { text, attachments, sender } = props;
-  const specificClasses = sender ? senderUseStyles() : otherUserUseStyles();
-  const sharedClasses = sharedUseStyles();
+  const specificClasses = sender ? senderUseStyles(props) : otherUserUseStyles(props);
+  const sharedClasses = sharedUseStyles(props);
 
   const Image = () =>
     <Box className={`${sharedClasses.imageContainer} ${specificClasses.imageContainer}`}>
       {attachments &&
-        attachments.map((image) => {
-          return (
-            <a href={image} target="_blank" rel="noreferrer">
-              <img
-                src={image}
-                alt="attachment" key={image}
-                className={`${sharedClasses.image} 
-                            ${(attachments.length > 1 && text.length >= 0) || (attachments.length === 1 && text.length === 0) ? `${specificClasses.singleBorder}` : ""}
-                            ${attachments.length === 1 && text.length > 0 ? `${specificClasses.imageAccompanyBorder}` : ""}
-                          `}
-              />
-            </a>
-          )
-        })}
+        attachments.map((image) => (
+          <a href={image} target="_blank" rel="noreferrer" key={image}>
+            <img
+              src={image}
+              alt="attachment"
+              className={`${sharedClasses.image} ${specificClasses.image}`}
+            />
+          </a>
+        ))
+      }
     </Box>
 
   const Text = () =>
-    <Box className={`${specificClasses.bubble} 
-                     ${attachments && attachments.length === 1 ? `${specificClasses.textAccompanyBorder}` : `${specificClasses.singleBorder}`} 
-                     ${attachments && attachments.length > 1 ? `${sharedClasses.bubbleMargin}` : ""}`}>
+    <Box className={`${specificClasses.bubble} ${sharedClasses.bubbleMargin}`}>
       <Typography className={`${sharedClasses.text} ${specificClasses.text}`}>{text}</Typography>
     </Box>
 
   // only attachments
   if (attachments && text.length === 0) {
-    return (
-      <Image />
-    );
+    return <Image />
     // attachments with text
   } else if (attachments && text.length > 0) {
-    return (
+    return attachments.length > 1 ? (
       <>
-        {attachments.length > 1 ? (
-          <>
-            <Text />
-            <Image />
-          </>
-        ) : (
-          <>
-            <Image />
-            <Text />
-          </>
-        )}
+        <Text />
+        <Image />
+      </>
+    ) : (
+      <>
+        <Image />
+        <Text />
       </>
     )
     // only text
   } else {
-    return (
-      <Text />
-    );
+    return <Text />
   }
 }
 

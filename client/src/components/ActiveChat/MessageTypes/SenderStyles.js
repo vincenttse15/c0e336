@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-export const senderUseStyles = makeStyles(() => ({
+export const senderUseStyles = makeStyles((props) => ({
   imageContainer: {
     justifyContent: "flex-end",
   },
@@ -9,14 +9,14 @@ export const senderUseStyles = makeStyles(() => ({
   },
   bubble: {
     background: "#F4F6FA",
+    borderRadius: props => (props.attachments && props.attachments.length > 1) ||
+      (props.attachments === null) ?
+      "10px 10px 0px 10px" : "0px 0px 0px 10px",
   },
-  singleBorder: {
-    borderRadius: "10px 10px 0 10px",
-  },
-  textAccompanyBorder: {
-    borderRadius: "0px 0px 0px 10px",
-  },
-  imageAccompanyBorder: {
-    borderRadius: "10px 10px 0px 0px",
-  },
+  image: {
+    borderRadius: props => (props.attachments) && (
+      (props.attachments.length > 1 && props.text.length >= 0) ||
+      (props.attachments.length === 1 && props.text.length === 0)) ?
+      "10px 10px 0px 10px" : "10px 10px 0px 0px",
+  }
 })); 

@@ -129,3 +129,12 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const cloudinaryUpload = (formData, promises) => {
+  try {
+    promises.push(axios.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_LINK, formData));
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+} 

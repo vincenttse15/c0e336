@@ -4,8 +4,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage } from "../../store/utils/thunkCreators";
-import axios from "axios";
+import { postMessage, cloudinaryUpload } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,25 +99,15 @@ const Input = (props) => {
     for (const file of files) {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", "hatchways");
+      formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
 
-      try {
-        promises.push(axios.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_LINK, formData));
-      } catch (error) {
-        console.error();
-        return;
-      }
+      cloudinaryUpload(formData, promises);
     }
 
-    try {
-      const responseArray = await Promise.all(promises);
-      responseArray.forEach((response) => {
-        urlArray.push(response.data.secure_url);
-      });
-    } catch (error) {
-      console.error();
-      return;
-    }
+    const responseArray = await Promise.all(promises);
+    responseArray.forEach((response) => {
+      urlArray.push(response.data.secure_url);
+    });
   };
 
   const deleteSelectedFile = (index) => {
@@ -129,20 +118,18 @@ const Input = (props) => {
     <Grid container direction="column">
       {files.length > 0 && (
         <Grid container item direction="row" className={classes.selectedImagesContainer} wrap="nowrap">
-          {files.map((file, index) => {
-            return (
-              <Grid container className={classes.selectedImageContainer} item direction="row" alignItems="center" key={file.name + index} wrap="nowrap">
-                <Grid item>
-                  <Typography className={classes.fileName}>{file.name}</Typography>
-                </Grid>
-                <Grid item>
-                  <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
-                    <DeleteOutlineIcon />
-                  </IconButton>
-                </Grid>
+          {files.map((file, index) => (
+            <Grid container className={classes.selectedImageContainer} item direction="row" alignItems="center" key={file.name + index} wrap="nowrap">
+              <Grid item>
+                <Typography className={classes.fileName}>{file.name}</Typography>
               </Grid>
-            );
-          })}
+              <Grid item>
+                <IconButton color="secondary" onClick={(e) => deleteSelectedFile(index)}>
+                  <DeleteOutlineIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          ))}
         </Grid>
       )}
       <form className={classes.root} onSubmit={handleSubmit}>
