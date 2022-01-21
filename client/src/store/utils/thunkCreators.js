@@ -8,7 +8,9 @@ import {
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
-axios.interceptors.request.use(async function (config) {
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.request.use(async function (config) {
   const token = await localStorage.getItem("messenger-token");
   config.headers["x-access-token"] = token;
 
@@ -20,7 +22,7 @@ axios.interceptors.request.use(async function (config) {
 export const fetchUser = () => async (dispatch) => {
   dispatch(setFetchingStatus(true));
   try {
-    const { data } = await axios.get("/auth/user");
+    const { data } = await axiosInstance.get("/auth/user");
     dispatch(gotUser(data));
     if (data.id) {
       socket.emit("go-online", data.id);
@@ -34,7 +36,7 @@ export const fetchUser = () => async (dispatch) => {
 
 export const register = (credentials) => async (dispatch) => {
   try {
-    const { data } = await axios.post("/auth/register", credentials);
+    const { data } = await axiosInstance.post("/auth/register", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
@@ -46,7 +48,7 @@ export const register = (credentials) => async (dispatch) => {
 
 export const login = (credentials) => async (dispatch) => {
   try {
-    const { data } = await axios.post("/auth/login", credentials);
+    const { data } = await axiosInstance.post("/auth/login", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
@@ -58,7 +60,7 @@ export const login = (credentials) => async (dispatch) => {
 
 export const logout = (id) => async (dispatch) => {
   try {
-    await axios.delete("/auth/logout");
+    await axiosInstance.delete("/auth/logout");
     await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
@@ -70,7 +72,8 @@ export const logout = (id) => async (dispatch) => {
 // CONVERSATIONS THUNK CREATORS
 export const fetchConversations = () => async (dispatch) => {
   try {
-    const { data } = await axios.get("/api/conversations");
+    const { data } = await axiosInstance.get("/api/conversations");
+
     data.forEach((conversation) => {
       conversation.messages.sort((a, b) => {
         if (new Date(a.createdAt) > new Date(b.createdAt)) {
@@ -80,6 +83,7 @@ export const fetchConversations = () => async (dispatch) => {
         }
       })
     });
+
     dispatch(gotConversations(data));
   } catch (error) {
     console.error(error);
@@ -87,7 +91,7 @@ export const fetchConversations = () => async (dispatch) => {
 };
 
 const saveMessage = async (body) => {
-  const { data } = await axios.post("/api/messages", body);
+  const { data } = await axiosInstance.post("/api/messages", body);
   return data;
 };
 
@@ -119,9 +123,18 @@ export const postMessage = (body) => async (dispatch) => {
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
-    const { data } = await axios.get(`/api/users/${searchTerm}`);
+    const { data } = await axiosInstance.get(`/api/users/${searchTerm}`);
     dispatch(setSearchedUsers(data));
   } catch (error) {
     console.error(error);
   }
 };
+
+export const cloudinaryUpload = (formData, promises) => {
+  try {
+    promises.push(axios.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_LINK, formData));
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+} 
